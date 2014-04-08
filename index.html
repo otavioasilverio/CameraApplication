@@ -1,32 +1,70 @@
-﻿<!DOCTYPE html>
+﻿
+
+
+<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <title>XChat</title>   
+<meta charset="ISO-8859-1">
+<title>Smartlab Cam</title>
 
-    <!-- XChat references -->
+<!-- XChat references -->
     <link href="css/default.css" rel="stylesheet" />
      <script src="http://www.google.com/jsapi"></script>
     <script>
         google.load("jquery", "1.4.1");
     </script>
     <script src="js/cameraApplication.js"></script>   
+<script type="text/javascript">
+	var pwd = "";
 
+	function start() {	
+		pwd = prompt("Password");
 
+		setTimeout("update()", 1000);
+
+		var drawingCanvas = 
+			document.getElementById('canvas');
+
+		drawingCanvas.width  = window.innerWidth;
+		drawingCanvas.height = window.innerHeight / 2;
+	}
+
+	function update () {
+		var drawingCanvas = 
+			document.getElementById('canvas');
+
+		// Check the element is in the DOM and 
+		// the browser supports canvas
+		if(drawingCanvas.getContext) {
+			// init a 2-dimensional 
+			// drawing context
+			var context = 
+				drawingCanvas.getContext('2d');
+			//Canvas commands go here
+
+			var cam = new Image();
+			cam.onload = function() {
+				context.drawImage(cam, 0, 0, 
+					cam.width, cam.height);
+			}
+			cam.src = 'cam.jpg?pwd=' + pwd;
+			setTimeout("update()", 500);
+		}
+
+	}
+</script>
 
 </head>
-<body>    
-	
+<body onload="start()">
 
-	<input type="file" accept="video/*;capture=camcorder">
-	<device type="media" onchange="update(this.data)"></device>
-	<video autoplay></video>
-	<script>
-	  function update(stream) {
-		document.querySelector('video').src = stream.url;
-	  }
-	</script>
+	<a href="http://www.smartlab.at">
+		<img src="header.jpg"/>
+	</a>
 
-
+	<canvas id="canvas">
+		<p>Your browser doesn't 
+		support canvas.
+		</p>
+	</canvas>
 </body>
 </html>
